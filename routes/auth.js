@@ -26,7 +26,19 @@ router.post("/send-otp", async (req, res) => {
       expiresAt: Date.now() + 300000
     });
 
-    console.log(`OTP for ${phoneNumber}: ${otp}`);
+    // console.log(`OTP for ${phoneNumber}: ${otp}`);
+    import twilio from "twilio";
+
+    const client = twilio(
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN
+    );
+
+    await client.messages.create({
+      from: process.env.TWILIO_WHATSAPP_NUMBER,
+      to: `whatsapp:${phoneNumber}`,
+      body: `Your Auction11 OTP is ${otp}`
+    });
 
     res.json({
       success: true
